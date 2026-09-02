@@ -1,4 +1,9 @@
 {
+
+  "name": "cse341-books",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "server.js",
   "scripts": {
     "start": "node --env-file=.env server.js",
     "dev": "nodemon --env-file=.env server.js",
@@ -7,7 +12,8 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "express": "^5.2.1"
+    "express": "^5.2.1",
+    "mongodb": "^7.6.0"
   },
   "devDependencies": {
     "eslint": "^10.9.1",
