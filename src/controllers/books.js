@@ -1,4 +1,5 @@
 import {getAllbooks, getBookById} from '../models/books.js';
+import {getAllbooks} from '../models/books.js';
 
 const getBooksHandler = async (req, res) => {
     try{
@@ -24,3 +25,4 @@ const getBookByIdHandler = async (req, res) => {
     }
 }
 export {getBooksHandler, getBookByIdHandler};
+export {getBooksHandler};
