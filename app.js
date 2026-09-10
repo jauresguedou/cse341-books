@@ -6,6 +6,8 @@ import swaggerUi from  'swagger-ui-express';
 
 import swaggerDocument from './swagger.json' with { type: 'json' };
 
+
+
 import { getDb } from './src/db/connect.js';
 const app = express();
 app.use(express.json());
