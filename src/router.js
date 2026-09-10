@@ -1,7 +1,7 @@
 import express from 'express';
 const router = express.Router();
 
-import { getBooksHandler, getBookByIdHandler} from './controllers/books.js';
+import { getBooksHandler, getBookByIdHandler, createBookHandler, updateBookHandler, deleteBookHandler} from './controllers/books.js';
 
 import { 
     getAllAuthors,
@@ -11,6 +11,53 @@ import {
     deleteAuthor, 
 
  } from './controllers/authors.js';
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Book:
+ *       type: object
+ *       required:
+ *         - id
+ *         - authorId
+ *         - title
+ *         - publicationDate
+ *       properties:
+ *         id:
+ *           type: string
+ *           example: b1
+ *         authorId:
+ *           type: string
+ *           description: ID of the author who wrote the book
+ *           example: a1
+ *         title:
+ *           type: string
+ *           example: The Example Book
+ *         publicationDate:
+ *           type: string
+ *           example: '2026-01-15'
+ *     BookInput:
+ *       allOf:
+ *         - $ref: '#/components/schemas/Book'
+ *     BookUpdate:
+ *       type: object
+ *       required:
+ *         - authorId
+ *         - title
+ *         - publicationDate
+ *       properties:
+ *         authorId:
+ *           type: string
+ *           description: ID of the author who wrote the book
+ *           example: a1
+ *         title:
+ *           type: string
+ *           example: The Updated Book
+ *         publicationDate:
+ *           type: string
+ *           example: '2026-02-01'
+ */
 
 /**
  * @swagger
@@ -27,8 +74,7 @@ import {
  *             schema:
  *               type: array
  *               items:
- *                 type: object
- *                 additionalProperties: true
+ *                 $ref: '#/components/schemas/Book'
  *       500:
  *         description: Internal server error
  *         content:
@@ -62,8 +108,7 @@ router.get('/books', getBooksHandler);
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               additionalProperties: true
+ *               $ref: '#/components/schemas/Book'
  *       404:
  *         description: Book not found
  *         content:
@@ -233,6 +278,103 @@ router.put('/authors/:id', updateAuthor);
  *         description: Unable to delete author
  */
 router.delete('/authors/:id', deleteAuthor);
+
+
+/**
+ * @swagger
+ * /books:
+ *   post:
+ *     summary: Create a book
+ *     tags:
+ *       - Books
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/BookInput'
+ *           example:
+ *             id: b4
+ *             authorId: a1
+ *             title: Example Book
+ *             publicationDate: '2026-01-15'
+ *     responses:
+ *       201:
+ *         description: Book created
+ *       400:
+ *         description: Missing required book fields or author does not exist
+ *       500:
+ *         description: Internal server error
+ */
+router.post('/books', createBookHandler);
+
+/**
+ * @swagger
+ * /books/{id}:
+ *   put:
+ *     summary: Update a book by ID
+ *     tags:
+ *       - Books
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: The ID of the book to update
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/BookUpdate'
+ *           example:
+ *             authorId: a1
+ *             title: Updated Book
+ *             publicationDate: '2026-02-01'
+ *     responses:
+ *       200:
+ *         description: Book updated
+ *       400:
+ *         description: Missing required book fields or author does not exist
+ *       404:
+ *         description: Book not found
+ *       500:
+ *         description: Internal server error
+ */
+router.put('/books/:id', updateBookHandler);
+
+/**
+ * @swagger
+ * /books/{id}:
+ *   delete:
+ *     summary: Delete a book by ID
+ *     tags:
+ *       - Books
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: The ID of the book to delete
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Book deleted
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Book deleted successfully
+ *       404:
+ *         description: Book not found
+ *       500:
+ *         description: Internal server error
+ */
+router.delete('/books/:id', deleteBookHandler);
 
 
 
