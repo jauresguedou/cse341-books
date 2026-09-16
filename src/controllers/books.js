@@ -1,4 +1,4 @@
-import { getAllBooks, getBookById } from '../models/books.js';
+import { getAllBooks, getBookById, authorExists, createBook, updateBook, deleteBook } from '../models/books.js';
 
 const getBooksHandler = async (req, res) => {
     try {

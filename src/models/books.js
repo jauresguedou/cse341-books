@@ -14,7 +14,7 @@ const getBookById = async (bookId) => {
      return book;
 };
 
-const authorExits = async(authorId) => {
+const authorExists = async(authorId) => {
     const db = getDb();
     const author = await db.collection('authors').findOne({id: authorId});
     return author !== null;
@@ -36,7 +36,7 @@ const updateBook = async (bookId, bookData) => {
     const db = getDb();
 
     if (bookData.authorId) {
-        const validAuthor = await authorExits(bookData.authorId);
+        const validAuthor = await authorExists(bookData.authorId);
         if (!validAuthor) {
             throw new Error(`Author with id "${bookData.authorId}" does not exist`);
         }
@@ -46,7 +46,9 @@ const updateBook = async (bookId, bookData) => {
     const result = await collection.updateOne(
         { id: bookId},
         { $set: bookData}
-    ); 
+    );
+    
+    console.log('UPDATE RESULT:', result);
     return result;
 };
 
@@ -57,5 +59,5 @@ const deleteBook = async (bookId) => {
     return result;
 };
 
-export {getAllBooks, getBookById, createBook, updateBook, deleteBook, authorExits};
+export {getAllBooks, getBookById, createBook, updateBook, deleteBook, authorExists};
 
